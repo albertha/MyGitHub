@@ -1,0 +1,122 @@
+<html>
+<head>
+<style>
+div.block{
+  overflow:hidden;
+}
+div.block label{
+  width:10px;
+  display:block;
+  float:left;
+  text-align:left;
+}
+div.block .input{
+  margin-left:4px;
+  float:left;
+}
+</style>
+<script type="text/javascript" src="jquery-min.js"></script>
+<script type="text/javascript">
+
+$(function() {
+	$('input#submit').click(function() {
+		var x = parseInt($('input#numberOfRows').val());
+		var y = parseInt($('input#numberOfCols').val());
+		var str = GetOutput(x, y);
+		$('#output').html(str);
+	});
+});
+
+function GetOutput(x, y) {
+	var lineBreak = '<br/>';
+	var output = '';
+	for (var i = 1; i < x + 1; i++)
+	{
+		if (i != x)
+		{
+			var rowStr = '';
+			var rowSum = 0;
+			for (var j = 1; j < y + 1; j++)
+			{
+				// build row 
+				if (j != y)
+				{
+					rowStr = rowStr + j + ' ';
+					rowSum += j;
+				}
+				else
+				{
+					rowStr = rowStr + rowSum;
+				}
+			}
+			output += rowStr + lineBreak;
+			console.log(rowStr);
+		}
+		else //generate last row
+		{
+			var rowTotals = ''; 
+			for (var j = 1; j < y + 1; j++)
+			{
+				var colSum = 0;
+				var lastColSum = 0;
+				
+				if (j < y)
+				{
+					for (var k = 1; k < x + 1; k++)
+					{
+						if (k != x)
+						{
+							colSum += j; // Sum up the column
+						}
+												
+						if (k == x)
+						{
+							rowTotals = rowTotals + colSum + ' ';
+						}
+					}
+				}
+				else
+				{
+					// Sum up totals for last column
+					for (var k = 1; k < x; k++)
+					{
+						lastColSum += GetRowTotal(y);
+					}
+					rowTotals = rowTotals + lastColSum + ' ';
+				}
+			}
+			output += rowTotals;
+			console.log(rowTotals);
+		}
+	}
+	return output;
+}
+
+function GetRowTotal(y) {
+	var rowTotal = 0;
+	for (var i = 1; i < y; i++)
+	{
+		rowTotal += i;
+	}
+	return rowTotal;
+}
+
+</script>
+</head>
+<body>
+<div class="block">
+  <label>x:</label>
+  <input class="input" id="numberOfRows" type="text">
+</div>
+<div class="block">
+  <label>y:</label>
+  <input class="input" id="numberOfCols" type="text">
+</div>
+<input id="submit" type="button" value="submit">
+<br/>
+output:
+<br/>
+<div id="output"/>
+</body>
+
+</html>
